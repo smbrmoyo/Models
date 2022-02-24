@@ -4,7 +4,7 @@ import numpy as np
 # ReLU activation
 class ActivationReLU:
     # Forward pass
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         # Remember input values
         self.inputs = inputs
         # Calculate output values from inputs
@@ -18,3 +18,7 @@ class ActivationReLU:
         self.dinputs = dvalues.copy()
         # Zero gradient where input values were negative
         self.dinputs[self.inputs <= 0] = 0
+
+    # Calculate predictions for outputs
+    def predictions(self, outputs):
+        return outputs

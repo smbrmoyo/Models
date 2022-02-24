@@ -1,7 +1,9 @@
 import numpy as np
 
 
+# SGD optimizer
 class OptimizerSGD:
+
     # Initialize optimizer - set settings,
     # learning rate of 1. is default for this optimizer
     def __init__(self, learning_rate=1., decay=0., momentum=0.):
@@ -14,7 +16,8 @@ class OptimizerSGD:
     # Call once before any parameter updates
     def pre_update_params(self):
         if self.decay:
-            self.current_learning_rate = self.learning_rate * (1. / (1. + self.decay * self.iterations))
+            self.current_learning_rate = self.learning_rate * \
+                (1. / (1. + self.decay * self.iterations))
 
     # Update parameters
     def update_params(self, layer):
@@ -24,7 +27,6 @@ class OptimizerSGD:
             # filled with zeros
             if not hasattr(layer, 'weight_momentums'):
                 layer.weight_momentums = np.zeros_like(layer.weights)
-
                 # If there is no momentum array for weights
                 # The array doesn't exist for biases yet either.
                 layer.bias_momentums = np.zeros_like(layer.biases)
@@ -45,13 +47,14 @@ class OptimizerSGD:
 
         # Vanilla SGD updates (as before momentum update)
         else:
-            weight_updates = - self.current_learning_rate * layer.dweights
-            bias_updates = - self.current_learning_rate * layer.dbiases
-
-            # Update weights and biases using either
-            # vanilla or momentum updates
-            layer.weights += weight_updates
-            layer.biases += bias_updates
+            weight_updates = - self.current_learning_rate * \
+                layer.dweights
+            bias_updates = - self.current_learning_rate * \
+                layer.dbiases
+        # Update weights and biases using either
+        # vanilla or momentum updates
+        layer.weights += weight_updates
+        layer.biases += bias_updates
 
     # Call once after any parameter updates
     def post_update_params(self):
