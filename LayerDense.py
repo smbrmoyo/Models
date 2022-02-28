@@ -18,6 +18,15 @@ class LayerDense:
         self.bias_regularizer_l1 = bias_regularizer_l1
         self.bias_regularizer_l2 = bias_regularizer_l2
 
+    # Retrieve layer parameters
+    def get_parameters(self):
+        return self.weights, self.biases
+
+    # Set weights and biases in a layer instance
+    def set_parameters(self, weights, biases):
+        self.weights = weights
+        self.biases = biases
+
     # Forward pass
     def forward(self, inputs, training):
 

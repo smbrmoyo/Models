@@ -1,7 +1,10 @@
+import os
 import nnfs
+from cv2 import cv2
 from nnfs.datasets import spiral_data, sine_data
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from AccuracyCategorical import AccuracyCategorical
 from AccuracyRegression import AccuracyRegression
@@ -19,29 +22,62 @@ from OptimizerSGD import OptimizerSGD
 from ActivationSoftmax import ActivationSoftmax
 from LossCategoricalCrossentropy import LossCategoricalCrossentropy
 
-nnfs.init()
+# data = os.listdir("./weatherHistory.csv")
+df = pd.read_csv("./weatherHistory.csv", parse_dates=["Formatted Date"])
+
+# df = df["Formatted Date"].to_d
+
+print(df.head())
+
+"""# Loads a MNIST dataset
+def load_dataset(dataset, path):
+    # Scan all the directories and create a list of labels
+    labels = os.listdir(os.path.join(path, dataset))
+    # Create lists for samples and labels
+    X = []
+    y = []
+    # For each label folder
+    for label in labels:
+        # And for each image in given folder
+        for file in os.listdir(os.path.join(path, dataset, label)):
+            # Read the image
+            image = cv2.imread(
+                os.path.join(path, dataset, label, file),
+                cv2.IMREAD_UNCHANGED)
+            # And append it and a label to the lists
+            X.append(image)
+            y.append(label)
+
+    # Convert the data to proper numpy arrays and return
+    return np.array(X), np.array(y).astype('uint8')
+
+
+# MNIST dataset (train + test)
+def create_data(path):
+    # Load both sets separately
+    X, y = load_dataset('train', path)
+    X_test, y_test = load_dataset('test', path)
+    # And return all the data
+    return X, y, X_test, y_test
+
 
 # Create dataset
-X, y = spiral_data(samples=1000, classes=3)
-X_test, y_test = spiral_data(samples=100, classes=3)
-# Instantiate the model
-model = Model()
+X, y, X_test, y_test = create_data_mnist('fashion_mnist_images')
 
-# Add layers
-model.add(LayerDense(2, 512, weight_regularizer_l2=5e-4,
-                     bias_regularizer_l2=5e-4))
-model.add(ActivationReLU())
-model.add(LayerDropout(0.1))
-model.add(LayerDense(512, 3))
-model.add(ActivationSoftmax())
-# Set loss, optimizer and accuracy objects
-model.set(
-    loss=LossCategoricalCrossentropy(),
-    optimizer=OptimizerAdam(learning_rate=0.05, decay=5e-5),
-    accuracy=AccuracyCategorical()
-)
-# Finalize the model
-model.finalize()
-# Train the model
-model.train(X, y, validation_data=(X_test, y_test),
-            epochs=10000, print_every=100)
+# Shuffle the training dataset
+keys = np.array(range(X.shape[0]))
+np.random.shuffle(keys)
+X = X[keys]
+y = y[keys]
+
+# Scale and reshape samples
+X = (X.reshape(X.shape[0], - 1).astype(np.float32) - 127.5) / 127.5
+X_test = (X_test.reshape(X_test.shape[0], - 1).astype(np.float32) -
+          127.5) / 127.5
+
+# Load the model
+model = Model.load('fashion_mnist.model')
+
+# Evaluate the model
+model.evaluate(X_test, y_test)
+"""
