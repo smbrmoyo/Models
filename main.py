@@ -22,14 +22,8 @@ from OptimizerSGD import OptimizerSGD
 from ActivationSoftmax import ActivationSoftmax
 from LossCategoricalCrossentropy import LossCategoricalCrossentropy
 
-# data = os.listdir("./weatherHistory.csv")
-df = pd.read_csv("./weatherHistory.csv", parse_dates=["Formatted Date"])
 
-# df = df["Formatted Date"].to_d
-
-print(df.head())
-
-"""# Loads a MNIST dataset
+# Loads a MNIST dataset
 def load_dataset(dataset, path):
     # Scan all the directories and create a list of labels
     labels = os.listdir(os.path.join(path, dataset))
@@ -53,7 +47,7 @@ def load_dataset(dataset, path):
 
 
 # MNIST dataset (train + test)
-def create_data(path):
+def create_data_mnist(path):
     # Load both sets separately
     X, y = load_dataset('train', path)
     X_test, y_test = load_dataset('test', path)
@@ -80,4 +74,4 @@ model = Model.load('fashion_mnist.model')
 
 # Evaluate the model
 model.evaluate(X_test, y_test)
-"""
+
